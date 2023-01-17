@@ -43,16 +43,139 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>com.github.wvengen</groupId>
+				<artifactId>proguard-maven-plugin</artifactId>
+				<version>2.6.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>proguard</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<proguardVersion>6.2.2</proguardVersion>
+					<injar>${project.build.finalName}.jar</injar>
+					<outjar>${project.build.finalName}.jar</outjar>
+					<obfuscate>true</obfuscate>
+					<options>
+						<option>-dontshrink</option>
+						<option>-dontoptimize</option>
+						<option>-useuniqueclassmembernames</option>
+						<option>-adaptclassstrings</option>
+						<option>-dontnote</option>
+						<option>-ignorewarnings</option>
+						<option>-dontwarn</option>
+						<option>-keep class * extends
+							org.springframework.boot.web.support.SpringBootServletInitializer
+						</option>
+						<option>-keep class * extends org.springframework.boot.loader.**</option>
+						<option>-keepclasseswithmembers public class * { public static void main(java.lang.String[]);}</option>
+						<option>-keepclassmembers enum * { *; }</option>
+						<option>-keep public class * { public protected *;}</option>
+						<option>-keepclassmembernames class * {java.lang.Class class$(java.lang.String); java.lang.Class
+							class$(java.lang.String, boolean);}
+						</option>
+						<option>-keepclassmembers enum * {public static **[] values(); public static **
+							valueOf(java.lang.String);}
+						</option>
+						<option>-keep @org.springframework.beans.factory.annotation.Service class *</option>
+						<option>-keep @org.springframework.stereotype.Controller class *</option>
+						<option>-keep @javax.persistence.* class * {*;}</option>
+						<option>-keepclassmembers class * implements java.io.Serializable.** {*;}</option>
+						<option>-keepclassmembers class * {
+							@org.springframework.beans.factory.annotation.Autowired *;
+							@org.springframework.beans.factory.annotation *;
+							@org.springframework.context *;
+							@org.springframework.stereotype *;
+							@org.springframework *;
+							@org.springframework.data.jpa.repository.JpaSpecificationExecutor *;
+							@org.springframework.stereotype.Repository *;
+							@org.springframework.beans.factory.annotation.Qualifier *;
+							@org.springframework.beans.factory.annotation.Value *;
+							@org.springframework.beans.factory.annotation.Required *;
+							@org.springframework.context.annotation.Bean *;
+							@lombok.extern.slf4j.Slf4j *;
+							@lombok *;
+							@org.springframework.context.annotation.Configuration *;
+							@org.springframework.boot.context.properties.ConfigurationProperties *;
+							@org.springframework.context.annotation.Primary *;
+							@org.springframework.boot.context.properties.ConfigurationProperties *;
+							@org.springframework.boot.context.properties.EnableConfigurationProperties *;
+							}
+						</option>
+						<option>-keep @org.springframework.cache.annotation.EnableCaching class *</option>
+						<option>-keep @org.springframework.context.annotation.Configuration class *</option>
+						<option>-keep @org.springframework.boot.context.properties.ConfigurationProperties class *</option>
+						<option>-keep @org.springframework.boot.autoconfigure.SpringBootApplication class *</option>
+						<option>-keep @org.springframework.stereotype.Repository class *</option>
+						<option>-allowaccessmodification</option>
+						<option>-keepattributes
+							Exceptions,
+							InnerClasses,
+							Signature,
+							Deprecated,
+							SourceFile,
+							LineNumberTable,
+							*Annotation*,
+							EnclosingMethod,
+							RuntimeVisibleAnnotations
+						</option>
+						<option>-keepdirectories org.springframework.boot.autoconfigure</option>
+						<option>-keepclassmembernames class * {
+							java.lang.Class class$(java.lang.String);
+							java.lang.Class class$(java.lang.String, boolean);
+							}
+						</option>
+						<option>-keepclassmembers class * implements java.io.Serializable { static final long
+							serialVersionUID; private static final java.io.ObjectStreamField[] serialPersistentFields;
+							private void writeObject(java.io.ObjectOutputStream); private void
+							readObject(java.io.ObjectInputStream); java.lang.Object writeReplace(); java.lang.Object
+							readResolve();}
+						</option>
+						<option>-keepnames class * implements java.io.Serializable</option>
+					</options>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.proguard</groupId>
+						<artifactId>proguard-base</artifactId>
+						<version>6.2.2</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<mainClass>com.karacorlu.oguzhan.SpringBootObfuscate.SpringBootObfuscateApplication</mainClass>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
 				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
+					<source>11</source>
+					<target>11</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
 			</plugin>
 		</plugins>
 	</build>
